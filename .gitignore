@@ -7,3 +7,6 @@ bin/ffprobe*.exe
 build/
 dist/
 *.srt
+# Model files are large; download via download_models.py
+subtitle_app/models/
+models/

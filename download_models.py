@@ -8,13 +8,15 @@ Usage:
 Models will be placed in the 'models/' directory, ready to use
 alongside the application.
 
-Note: Systran/faster-whisper models on HuggingFace require
-accepting the terms of use. First visit:
-    https://huggingface.co/Systran/faster-whisper
-Click "Access repository" to agree, then run:
-    huggingface-cli login
+For gated models (large-v3), first accept terms at:
+    https://huggingface.co/Systran/faster-whisper-large-v3
+Then set HF_TOKEN:
+    Windows: set HF_TOKEN=hf_your_token
+    Linux:   export HF_TOKEN=hf_your_token
 """
 
+import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -32,6 +34,8 @@ FILES = ["config.json", "model.bin", "tokenizer.json", "vocabulary.txt"]
 EXTRA_FILES: dict[str, list[str]] = {
     "large-v3": ["vocabulary.json", "preprocessor_config.json"],
 }
+
+HF_TOKEN = os.environ.get("HF_TOKEN")
 
 
 def get_files(model_size: str) -> list[str]:
@@ -54,11 +58,15 @@ def download_model(model_size: str) -> None:
     print(f"Downloading {model_size} from {repo_id}...")
     for filename in get_files(model_size):
         print(f"  {filename}...")
-        downloaded = hf_hub_download(repo_id=repo_id, filename=filename)
+        downloaded = hf_hub_download(
+            repo_id=repo_id,
+            filename=filename,
+            token=HF_TOKEN,
+            resume=True,
+        )
         path = Path(downloaded)
         target = dest / filename
         if path != target:
-            import shutil
             shutil.copy2(path, target)
     print(f"  -> {dest}")
     print()

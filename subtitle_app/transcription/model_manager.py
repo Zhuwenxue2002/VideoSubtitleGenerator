@@ -29,7 +29,7 @@ def _get_models_base_dir() -> Path:
     """Determine where to look for model files."""
     if getattr(sys, "frozen", False):
         return Path(sys.executable).parent / "models"
-    return Path(__file__).resolve().parent.parent / "models"
+    return Path(__file__).resolve().parent.parent.parent / "models"
 
 
 def _model_files_present(model_dir: str) -> bool:
