@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+bin/ffmpeg*.exe
+bin/ffprobe*.exe
+build/
+dist/
+*.srt
